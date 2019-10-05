@@ -29,7 +29,7 @@ var baseMaps = {
 
 
   // Store API query variables
-var url = "https://www.hikingproject.com/data/get-trails?lat=40.0274&lon=-105.2519&maxDistance=200&maxResults=500&key=" + TRAIL_KEY;
+var url = "/api/trails";
 
 
 // Grab the data with d3
@@ -38,8 +38,8 @@ d3.json(url, function(response) {
   // Create a new marker cluster group
   var markers = L.markerClusterGroup();
 
-  var trails = response.trails
-
+  var trails = response
+  console.log(trails)
   trails.forEach(function(data){
     markers.addLayer(L.marker([data.latitude, data.longitude])
     .bindPopup(data.name, data.length, data.difficulty));

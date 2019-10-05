@@ -22,11 +22,11 @@ maxResults = "1000"
 
 url = f"https://www.hikingproject.com/data/get-trails?lat={lat}&lon={lon}9&maxDistance={maxDistance}&maxResults={maxResults}&key={api_key}"
 
-database_path = "C:/Users/blake/Desktop/Git Hub Repository/Project/project2/Solved/Hiking/db/hiking.sqlite"
+database_path = "C:/Users/blake/Desktop/Git Hub Repository/Hiking/Hiking/db/hiking.sqlite"
 engine = create_engine(f"sqlite:///{database_path}")
 conn = engine.connect()
 
-def return_json(apicall):
+def return_json():
     try:
         response = requests.get(url)
 
@@ -36,10 +36,11 @@ def return_json(apicall):
             # Create Pandas Dataframe
         df = pd.DataFrame(json_obj['trails'])
             # Send Pandas Dataframe to DB
-        apicall.df.to_sql(name='hiking', con=engine, if_exists='replace', index=True)
-
-        print(json_obj)
+        database =df.to_sql(name='hiking', con=engine, if_exists='replace', index=True)
+        return database
+        return print(json.dumps(json_obj, indent=4,))
     except requests.exceptions.HTTPError as e:
         # if error keep going
        pass
 
+return_json
