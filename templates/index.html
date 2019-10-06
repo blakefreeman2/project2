@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Into the Trail</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/superhero/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/style.css">
+
+
+    <!-- Leaflet JS & CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
+    integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"
+    integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
+    crossorigin=""></script>
+​
+    <!-- d3 JS -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+​
+    <!-- Marker Cluster JS & CSS -->
+    <script type="text/javascript" src="https://unpkg.com/leaflet.markercluster@1.0.3/dist/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.0.3/dist/MarkerCluster.css">
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.0.3/dist/MarkerCluster.Default.css">
+​
+    <!-- Our CSS -->
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+
+
+</head>
+<body>
+  <div class="wrapper">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="index.html">
+              <div id="hiking">
+              <img src="static/images/hiking.gif" width="200" height="100" frameBorder="0" class="giphy-embed">
+              <img src="static/images/hiking.gif" width="200" height="100" frameBorder="0" class="giphy-embed">
+              <img src="static/images/hiking.gif" width="200" height="100" frameBorder="0" class="giphy-embed">
+              <img src="static/images/hiking.gif" width="200" height="100" frameBorder="0" class="giphy-embed">
+              <img src="static/images/hiking.gif" width="200" height="100" frameBorder="0" class="giphy-embed">
+              <img src="static/images/hiking.gif" width="200" height="100" frameBorder="0" class="giphy-embed">
+              <img src="static/images/hiking.gif" width="200" height="100" frameBorder="0" class="giphy-embed">
+              <img src="static/images/hiking.gif" width="200" height="100" frameBorder="0" class="giphy-embed">
+              <img src="static/images/hiking.gif" width="200" height="100" frameBorder="0" class="giphy-embed">
+              <img src="static/images/hiking.gif" width="200" height="100" frameBorder="0" class="giphy-embed">
+              <img src="static/images/hiking.gif" width="200" height="100" frameBorder="0" class="giphy-embed">
+              <img src="static/images/hiking.gif" width="200" height="100" frameBorder="0" class="giphy-embed">
+              </div>
+          </a>
+        </div>
+      </div>
+    </nav>
+    <div class="hero text-center">
+      <h1>Into the Trail</h1>
+      <h3>"You're off to great places, today is your date. Your mountain is waiting, so get on your way." ~Dr. Seuss</h3>
+    </div>
+    <div class="container">
+        <div id="borderDemo"><div id="map"></div></div>
+      <div class="row margin-top-50">
+        <div class="col-md-2">
+          <aside class="filters">
+            <div class="panel panel-default">
+              <div class="panel-heading">Filter Search</div>
+              <div class="panel-body">
+                <form>
+                  <div class="form-group">
+                    <ul class="list-group" id="filters">
+                      <li class="filter list-group-item">
+                        <!-- trailName -->
+                        <label for="trailname">Enter Trail Name</label>
+                        <input class="form-control" id="trailname" type="text" placeholder="Sky Pond">
+                      </li>
+                      <li class="filter list-group-item">
+                        <!-- city -->
+                        <label for="city">Enter City</label>
+                        <input class="form-control" id="city" type="text" placeholder="Estes Park">
+                      </li>
+                      <li class="filter list-group-item">
+                        <!-- difficulty -->
+                        <label for="difficulty">Enter Difficulty</label>
+                        <select id="difficulty" onchange="handleDifficultyChange(this)">
+                          <option value="greenBlue">Beginner</option>
+                          <option value="blue">Normal</option>
+                          <option value="blueBlack">Hard</option>
+                          <option value="black">Extreme</option>
+                        </select>
+                      </li>
+                      <li class="filter list-group-item">
+                        <!-- stars or ratings -->
+                        <label for="stars">Enter Rating</label>
+                        <input class="form-control" id="stars" type="texy" placeholder="4.5">
+                      </li>
+                    </ul>
+                  </div>
+                  <button id="filter-btn" type="button" class="btn btn-default">Filter Table</button>
+                </form>
+              </div>
+            </div>
+          </aside>
+        </div>
+        <div class="col-md-10">
+          <div id="table-area" class="">
+            <table id="hiking-table" class="table table-striped">
+              <thead>
+                <tr>
+                  <th class="table-head">Name</th>
+                  <th class="table-head">Location</th>
+                  <th class="table-head">Length</th>
+                  <th class="table-head">Difficulty</th>
+                  <th class="table-head">Ratings</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Additional Library - simplyScroll -->
+    <div class = simple-scroll-list>
+    <ul id="scroller">
+      <li><img src="static/images/lake.jpeg" width="290" height="200"></li>
+      <li><img src="static/images/standing.jpeg" width="290" height="200"></li>
+      <li><img src="static/images/Spruce_Forest.jpg" width="290" height="200"></li>
+    </ul>   
+  </div>
+
+
+    <script type="text/javascript" 
+    src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js">
+    </script>
+    <script type="text/javascript" src="jquery.simplyscroll.js"></script>
+    <link rel="stylesheet" href="jquery.simplyscroll.css" media="all" 
+    type="text/css">
+
+    <script type="text/javascript">
+    (function($) {
+	          $(function() { //on DOM ready 
+    		            $("#scroller").simplyScroll();
+	          });
+    })(jQuery);
+  </script>
+
+
+
+  <script type="text/javascript" src="static/js/config.js"></script>
+  <script type="text/javascript" src="static/js/map.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.11.0/d3.js"></script>
+  <script src="static/js/app.js"></script>
+</body>
+
+</html>

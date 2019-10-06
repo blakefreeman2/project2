@@ -1,65 +1,101 @@
 // from data.js
-var tableData = data;
+var minLength = 0;
+var maxLength = 0;
+var difficulty = "";
 
-// YOUR CODE HERE!
-
-// Need to select "tbody" in the index.html page using d3
-var tbody = d3.select("tbody");
+var apiResults;
 
 // Build a table every time we call the table
 // Clear out table first every time is called
-function masterTable(ufoData) {
+function masterTable(trailData) {
+    // Need to select "tbody" in the index.html page using d3
+    var tbody = d3.select("tbody");
     tbody.html("");
-    ufoData.forEach((ufoObjects) => {
+    trailData.forEach((trailObjects) => {
+        var cityName = trailObjects.location.split(',')[0];
         var row = tbody.append("tr");
         // only need value since we already have the keys set-up
-        Object.values(ufoObjects).forEach((value) => {
-            var cell = row.append("td");
-            cell.text(value);
-        })
-    }) 
+
+            row.append("td").text(trailObjects.name);
+            row.append("td").text(cityName);
+            row.append("td").text(trailObjects.length);
+            row.append("td").text(trailObjects.difficulty);
+            row.append("td").text(trailObjects.stars);
+    })
 }
 
-// pass in tableData to the created function to see on .html page
-masterTable(tableData);
+function handleLengthChange(control) {
+    var length = control.value;
+    var splitLength = length.split('-');
+    minLength = splitLength[0];
+    maxLength = splitLength[1];
+    console.log("minLength is ", minLength);
+    console.log("maxLength is ", maxLength);
+}
 
-// select button and locate the #filter-btn (this is a ID so use # symbol)
-var press = d3.select("#filter-btn");
+function handleDifficultyChange(control) {
+    difficulty = control.value;
+}
+
+
+
+d3.json('/api/hiking', function (error,tableData) {
+
+    // pass in tableData to the created function to see on .html page
+    masterTable(tableData);
+
+    apiResults = tableData;
+})
+
+ // select button and locate the #filter-btn (this is a ID so use # symbol)
+ var press = d3.select("#filter-btn");
 
 // activate button (Enter a Date)
 press.on("click", function() {
     // prevent page from refreshing (stops the page from clearing out inputs)
     d3.event.preventDefault();
     // use .property("value") to grab value at the time the button is clicked
-    var dateInput = d3.select("#datetime").property("value");
+    var nameInput = d3.select("#trailname").property("value");
+    console.log("nameInput", nameInput);
     var cityInput = d3.select("#city").property("value");
-    var stateInput = d3.select("#state").property("value");
-    var countryInput = d3.select("#country").property("value");
-    var shapeInput = d3.select("#shape").property("value");
+    if (cityInput != "") {
+        cityInput += ", Colorado";
+    }
+    console.log("cityInput", cityInput);
+    var difficultyInput = difficulty;
+    console.log("difficultyInput", difficultyInput);
+    var starsInput = d3.select("#stars").property("value");
+
 
     // allows for individual filters
-    var filteredData = tableData
-    if(dateInput) {
-        filteredData = filteredData.filter(row => row.datetime === dateInput);
+
+    // looping through code for distance
+    var filteredData = apiResults;
+
+    if(nameInput) {
+        filteredData = filteredData.filter(row => row.name === nameInput);
     }
     if(cityInput) {
-        filteredData = filteredData.filter(row => row.city === cityInput);
+        filteredData = filteredData.filter(row => row.location === cityInput);
     }
-    if(stateInput) {
-        filteredData = filteredData.filter(row => row.state === stateInput);
+    if(difficultyInput) {
+        filteredData = filteredData.filter(row => row.difficulty == difficultyInput);
     }
-    if(stateInput) {
-        filteredData = filteredData.filter(row => row.country === countryInput);
-    }
-    if(stateInput) {
-        filteredData = filteredData.filter(row => row.shape === shapeInput);
+    if(starsInput) {
+        filteredData = filteredData.filter(row => row.stars == starsInput);
     };
     console.log(filteredData)
-    
-    
 
     // pass in masterTable again but with newly created filteredData function
     masterTable(filteredData)
 })
+
+
+var $ = require('jquery');
+require('jquery-simplyscroll');
+
+$("#scroller").simplyScroll({
+  speed: 1
+});
 
 
